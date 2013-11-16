@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Acme" default="phpunit">
+    <target name="phpunit">
+        <exec executable="bin/phpunit" passthru="true" checkreturn="true">
+            <arg value="-c" />
+            <arg value="app" />
+        </exec>
+    </target>
+</project>
