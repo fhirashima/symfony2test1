@@ -1,9 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Acme" default="phpunit">
-    <target name="phpunit">
-        <exec executable="bin/phpunit" passthru="true" checkreturn="true">
-            <arg value="-c" />
-            <arg value="app" />
-        </exec>
+<project name="Symfony2" basedir="." default="build:main">
+    <!-- Properties -->
+    <property name="dir.app" value="${project.basedir}/app" />
+    <property name="dir.src" value="${project.basedir}/src" />
+    <property name="dir.bin" value="${project.basedir}/bin" />
+    <property name="dir.build" value="${project.basedir}/build" />
+    <property name="dir.reports" value="${dir.build}/logs" />
+    <property name="dir.reports.coverage" value="${dir.reports}/coverage" />
+
+    <!-- Filesets -->
+    <fileset id="sourcecode" dir="${dir.src}">
+        <include name="**/*.php" />
+    </fileset>
+
+    <!-- Default target -->
+    <target name="build:main"
+            depends="build:clean, build:prepare, build:test"
+            description="Run all test and build everything" />
+
+    <!-- Test target -->
+    <target name="build:test"
+            depends="test:unit"
+            description="Executes all tests.." />
+
+    <!-- Project build clean -->
+    <target name="build:clean" description="Clean up build directories.">
+        <echo msg="Cleaning build directories ..." />
+        <delete dir="${dir.build}" verbose="true" />
+    </target>
+
+    <!-- Project build prepare -->
+    <target name="build:prepare" description="Create build directories.">
+        <echo msg="Creating build directories ..." />
+        <mkdir dir="${dir.build}" />
+        <mkdir dir="${dir.reports}" />
+        <mkdir dir="${dir.reports.coverage}" />
+    </target>
+
+    <!-- Unit tests -->
+    <target name="test:unit" description="Executes unit tests.">
+        <echo msg="Running unit tests ..." />
+        <exec command="${dir.bin}/phpunit
+            --log-junit       ${dir.reports}/phpunit.xml
+            --coverage-clover ${dir.reports.coverage}/clover.xml
+            --coverage-html   ${dir.reports.coverage}/
+            -c ${dir.app}"/>
     </target>
 </project>
