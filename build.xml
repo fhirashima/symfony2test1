@@ -15,8 +15,13 @@
 
     <!-- Default target -->
     <target name="build:main"
-            depends="build:clean, build:prepare, build:test"
+            depends="build:clean, build:prepare, build:check, build:test"
             description="Run all test and build everything" />
+
+    <!-- Check target -->
+    <target name="build:check"
+          depends="check:md"
+          description="Analyzes app code." />
 
     <!-- Test target -->
     <target name="build:test"
@@ -46,4 +51,14 @@
             --coverage-html   ${dir.reports.coverage}/
             -c ${dir.app}"/>
     </target>
+
+    <!-- Mess detector -->
+    <target name="check:md" description="Generate code metrics.">
+        <echo msg="Generating code metrics ..." />
+        <phpmd rulesets="cleancode,codesize,unusedcode">
+            <fileset refid="sourcecode" />
+            <formatter type="xml" outfile="${dir.reports}/pmd.xml" />
+        </phpmd>
+    </target>
+
 </project>
