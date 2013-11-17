@@ -20,7 +20,7 @@
 
     <!-- Check target -->
     <target name="build:check"
-          depends="check:md"
+          depends="check:md, check:cs"
           description="Analyzes app code." />
 
     <!-- Test target -->
@@ -59,6 +59,18 @@
             <fileset refid="sourcecode" />
             <formatter type="xml" outfile="${dir.reports}/pmd.xml" />
         </phpmd>
+    </target>
+
+    <!-- code sniffer -->
+    <target name="check:cs" description="Checks coding standard.">
+        <echo msg="Checking coding standard ..." />
+        <exec command="${dir.bin}/phpcs
+            -s -w
+            --standard=PSR2
+            --report=checkstyle
+            --report-checkstyle=${dir.reports}/checkstyle.xml
+            ${dir.src}
+            "/>
     </target>
 
 </project>
